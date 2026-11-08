@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>বাজারঘর – অনলাইন শপ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7f6;--surface:#fff;--ink:#12263a;--muted:#5d6f7e;--line:#dde4e8;--brand:#0f7b63;--brand-d:#0a5c4a;--sale:#e5484d;--sun:#f6b73c}
+@media (prefers-color-scheme:dark){:root{--bg:#0e171f;--surface:#16232e;--ink:#e8eff4;--muted:#9fb0bd;--line:#26384a;--brand:#27b08f;--brand-d:#1d9376}}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Hind Siliguri",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff}
+.bar{max-width:1120px;margin:auto;padding:12px 16px;display:flex;gap:14px;align-items:center}
+.logo{font-size:1.5rem;font-weight:700;white-space:nowrap}
+.logo b{color:var(--sun)}
+.search{flex:1;padding:10px 14px;border-radius:8px;border:0;background:#fff;color:#12263a;min-width:0}
+.cartbtn{background:var(--sun);color:#12263a;border:0;border-radius:8px;padding:9px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.hero{max-width:1120px;margin:20px auto 0;padding:0 16px}
+.hero div{background:var(--brand);color:#fff;border-radius:16px;padding:36px 28px}
+.hero h1{font-size:clamp(1.6rem,4vw,2.6rem);line-height:1.25;max-width:16em}
+.hero p{margin-top:8px;opacity:.92}
+main{max-width:1120px;margin:auto;padding:20px 16px 60px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 16px;border-radius:99px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+select{margin-left:auto;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:150px;display:grid;place-items:center;font-size:4.2rem;position:relative}
+.tag{position:absolute;top:10px;left:10px;background:var(--sale);color:#fff;font-size:.8rem;padding:1px 9px;border-radius:99px}
+.info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.info h3{font-size:1rem;font-weight:600}
+.cat{font-size:.85rem;color:var(--muted)}
+.price{font-weight:700;font-size:1.1rem;margin-top:auto}
+.price s{font-weight:400;color:var(--muted);font-size:.9rem;margin-left:6px}
+.add{margin-top:8px;background:var(--brand);color:#fff;border:0;border-radius:8px;padding:8px;font-weight:600;cursor:pointer}
+.add:hover{background:var(--brand-d)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:30}
+.shade.on{display:block}
+aside{position:fixed;top:0;right:0;height:100%;width:min(400px,100%);background:var(--surface);z-index:40;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s}
+aside.on{transform:none}
+aside h2{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:1.2rem}
+.x{background:none;border:0;font-size:1.4rem;cursor:pointer}
+.items{flex:1;overflow:auto;padding:8px 16px}
+.row{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.row .e{font-size:2rem}
+.row .n{flex:1;font-size:.95rem}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--bg);cursor:pointer}
+.foot{padding:16px;border-top:1px solid var(--line)}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:1.15rem;margin-bottom:10px}
+.go{width:100%;background:var(--brand);color:#fff;border:0;border-radius:8px;padding:11px;font-weight:600;cursor:pointer}
+.go:disabled{opacity:.5;cursor:not-allowed}
+form{display:flex;flex-direction:column;gap:10px;padding:16px;overflow:auto}
+form label{display:flex;flex-direction:column;font-size:.9rem;gap:3px}
+form input{padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.note{font-size:.9rem;color:var(--muted)}
+.ok{padding:40px 20px;text-align:center}
+.ok .big{font-size:3.5rem}
+footer{text-align:center;color:var(--muted);padding:24px;border-top:1px solid var(--line);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){aside{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo">বাজার<b>ঘর</b></div>
+  <input class="search" id="q" type="search" placeholder="পণ্য খুঁজুন…" aria-label="পণ্য খুঁজুন">
+  <button class="cartbtn" id="openCart">🛒 কার্ট (<span id="cnt">০</span>)</button>
+</div></header>
+
+<section class="hero"><div>
+  <h1>প্রতিদিনের দরকারি জিনিস, ঘরে বসেই</h1>
+  <p>সারা দেশে ক্যাশ অন ডেলিভারি · ৳১,৫০০ এর বেশি অর্ডারে ডেলিভারি ফ্রি</p>
+</div></section>
+
+<main>
+  <div class="tools" id="tools"></div>
+  <div class="grid" id="grid"></div>
+</main>
+<footer>© ২০২৬ বাজারঘর · এটি একটি ডেমো দোকান</footer>
+
+<div class="shade" id="shade"></div>
+<aside id="drawer" aria-label="শপিং কার্ট">
+  <h2><span id="title">আপনার কার্ট</span><button class="x" id="close" aria-label="বন্ধ করুন">✕</button></h2>
+  <div id="body" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+</aside>
+
+<script>
+let PRODUCTS=[
+{id:1,n:"ওয়্যারলেস হেডফোন",c:"ইলেকট্রনিক্স",p:1850,o:2400,e:"🎧",bg:"#dbeafe"},
+{id:2,n:"স্মার্টওয়াচ",c:"ইলেকট্রনিক্স",p:3200,o:0,e:"⌚",bg:"#e0e7ff"},
+{id:3,n:"পাওয়ার ব্যাংক ১০০০০mAh",c:"ইলেকট্রনিক্স",p:1250,o:1600,e:"🔋",bg:"#dcfce7"},
+{id:4,n:"কটন পাঞ্জাবি",c:"ফ্যাশন",p:1450,o:0,e:"👘",bg:"#fde68a"},
+{id:5,n:"স্পোর্টস জুতা",c:"ফ্যাশন",p:2100,o:2800,e:"👟",bg:"#fecaca"},
+{id:6,n:"চামড়ার ব্যাগ",c:"ফ্যাশন",p:1750,o:0,e:"👜",bg:"#fed7aa"},
+{id:7,n:"রাইস কুকার",c:"ঘর-গৃহস্থালি",p:2650,o:3100,e:"🍚",bg:"#f1f5f9"},
+{id:8,n:"স্টিলের পানির বোতল",c:"ঘর-গৃহস্থালি",p:450,o:0,e:"🥤",bg:"#cffafe"},
+{id:9,n:"টেবিল ল্যাম্প",c:"ঘর-গৃহস্থালি",p:690,o:900,e:"💡",bg:"#fef9c3"},
+{id:10,n:"সুন্দরবনের খাঁটি মধু (৫০০গ্রাম)",c:"খাবার",p:620,o:0,e:"🍯",bg:"#fde68a"},
+{id:11,n:"নলেন গুড় (১ কেজি)",c:"খাবার",p:380,o:450,e:"🟤",bg:"#e7d5c3"},
+{id:12,n:"দার্জিলিং চা (২৫০গ্রাম)",c:"খাবার",p:340,o:0,e:"🍵",bg:"#d1fae5"}
+];
+const bn=n=>Number(n).toLocaleString("bn-BD");
+const tk=n=>"৳"+bn(n);
+const $=s=>document.querySelector(s);
+let cart={},cat="সব",query="",sort="";
+try{cart=JSON.parse(localStorage.getItem("cart")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("cart",JSON.stringify(cart))}catch(e){}};
+
+function buildTools(){const cats=["সব",...new Set(PRODUCTS.map(p=>p.c))];
+$("#tools").innerHTML=cats.map(c=>`<button class="chip" data-c="${c}" aria-pressed="${c===cat}">${c}</button>`).join("")+
+`<select id="sort" aria-label="সাজান"><option value="">সাজান</option><option value="a">দাম: কম থেকে বেশি</option><option value="d">দাম: বেশি থেকে কম</option></select>`;$("#sort").onchange=e=>{sort=e.target.value;render()};}
+$("#tools").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;
+  document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));render()};
+$("#q").oninput=e=>{query=e.target.value.trim();render()};
+
+function render(){
+  let list=PRODUCTS.filter(p=>(cat==="সব"||p.c===cat)&&p.n.includes(query));
+  if(sort==="a")list.sort((a,b)=>a.p-b.p);if(sort==="d")list.sort((a,b)=>b.p-a.p);
+  $("#grid").innerHTML=list.length?list.map(p=>`<article class="card">
+    <div class="pic" style="background:${p.bg}">${p.o?`<span class="tag">${bn(Math.round((1-p.p/p.o)*100))}% ছাড়</span>`:""}${p.i?`<img src="${p.i}" alt="" style="width:100%;height:100%;object-fit:cover">`:`<span aria-hidden="true">${p.e||"🛍️"}</span>`}</div>
+    <div class="info"><span class="cat">${p.c}</span><h3>${p.n}</h3>
+    <div class="price" style="color:var(--ink)">${tk(p.p)}${p.o?`<s>${tk(p.o)}</s>`:""}</div>
+    <button class="add" data-id="${p.id}">কার্টে যোগ করুন</button></div></article>`).join(""):
+    `<div class="empty">কোনো পণ্য পাওয়া যায়নি। অন্য নাম দিয়ে খুঁজুন।</div>`;
+}
+$("#grid").onclick=e=>{const b=e.target.closest(".add");if(!b)return;
+  cart[b.dataset.id]=(cart[b.dataset.id]||0)+1;save();badge();b.textContent="✓ যোগ হয়েছে";setTimeout(()=>b.textContent="কার্টে যোগ করুন",900)};
+
+const entries=()=>Object.entries(cart).map(([id,q])=>({p:PRODUCTS.find(x=>x.id==id),q})).filter(i=>i.p);
+const sub=()=>entries().reduce((s,i)=>s+i.p.p*i.q,0);
+const badge=()=>$("#cnt").textContent=bn(Object.values(cart).reduce((a,b)=>a+b,0));
+
+function open(){$("#drawer").classList.add("on");$("#shade").classList.add("on");showCart()}
+function shut(){$("#drawer").classList.remove("on");$("#shade").classList.remove("on")}
+$("#openCart").onclick=open;$("#close").onclick=shut;$("#shade").onclick=shut;
+document.onkeydown=e=>{if(e.key==="Escape")shut()};
+
+function showCart(){
+  $("#title").textContent="আপনার কার্ট";
+  const it=entries();
+  $("#body").innerHTML=`<div class="items">${it.length?it.map(({p,q})=>`<div class="row"><span class="e">${p.e||"🛍️"}</span>
+    <div class="n">${p.n}<br><small>${tk(p.p)}</small></div>
+    <div class="qty"><button data-m="${p.id}" aria-label="কমান">−</button><span>${bn(q)}</span><button data-a="${p.id}" aria-label="বাড়ান">+</button></div></div>`).join(""):
+    `<p class="empty" style="padding:40px 0">কার্ট খালি। পছন্দের পণ্য যোগ করুন।</p>`}</div>
+    <div class="foot"><div class="total"><span>মোট</span><span>${tk(sub())}</span></div>
+    <button class="go" id="checkout" ${it.length?"":"disabled"}>অর্ডার করুন</button></div>`;
+}
+$("#body").onclick=e=>{
+  const m=e.target.dataset.m,a=e.target.dataset.a;
+  if(m){cart[m]--;if(cart[m]<=0)delete cart[m];save();badge();showCart()}
+  if(a){cart[a]++;save();badge();showCart()}
+  if(e.target.id==="checkout")showForm();
+  if(e.target.id==="back")showCart();
+};
+
+function showForm(){
+  $("#title").textContent="ডেলিভারির তথ্য";
+  const ship=sub()>=1500?0:80;
+  $("#body").innerHTML=`<form id="f">
+    <label>আপনার নাম<input name="n" required autocomplete="name"></label>
+    <label>মোবাইল নম্বর<input name="m" required inputmode="numeric" pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX" title="১১ সংখ্যার বাংলাদেশি নম্বর দিন" autocomplete="tel"></label>
+    <label>পূর্ণ ঠিকানা<input name="a" required autocomplete="street-address"></label>
+    <p class="note">পেমেন্ট: ক্যাশ অন ডেলিভারি</p>
+    <p class="note">পণ্যের দাম ${tk(sub())} + ডেলিভারি ${ship?tk(ship):"ফ্রি"}</p>
+    <div class="total"><span>সর্বমোট</span><span>${tk(sub()+ship)}</span></div>
+    <button class="go" type="submit">অর্ডার নিশ্চিত করুন</button>
+    <button class="chip" type="button" id="back">← কার্টে ফিরুন</button></form>`;
+  $("#f").onsubmit=ev=>{ev.preventDefault();
+    const id="BG"+Math.floor(100000+Math.random()*900000);
+    cart={};save();badge();$("#title").textContent="অর্ডার সম্পন্ন";
+    $("#body").innerHTML=`<div class="ok"><div class="big">🎉</div><h3>ধন্যবাদ!</h3>
+      <p>আপনার অর্ডার নম্বর <b>${id}</b>।<br>আমরা শীঘ্রই ফোনে যোগাযোগ করব।</p>
+      <button class="go" style="margin-top:18px" id="done">কেনাকাটা চালিয়ে যান</button></div>`;
+    $("#done").onclick=shut;
+  };
+}
+
+buildTools();render();badge();
+fetch("products.json",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(Array.isArray(d)){PRODUCTS=d;cat="সব";buildTools();render();badge()}}).catch(()=>{});
+</script>
+</body>
+</html>
